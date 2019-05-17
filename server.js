@@ -2,8 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const { createRenderer } = require('vue-server-renderer');
+
 const resolve = file => path.resolve(__dirname, file);
 const createApp = require('./src/app');
+
 const context = {
     title: 'Vue SSR',
     meta: `
@@ -34,5 +36,5 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
-  console.log(`server started at localhost:${port}`)
+    console.log(`server started at localhost:${port}`);
 });

@@ -1,10 +1,14 @@
-const Vue = require('vue');
+import Vue from 'vue';
+import App from './App.vue';
 
-module.exports = function createApp(context) {
-    return new Vue({
-        data: {
-            url: context.url
-        },
-        template: `<div>The visited URL is: {{ url }}</div>`
+// 导出一个工厂函数，用于创建新的
+// 应用程序、router 和 store 实例
+function createApp() {
+    const app = new Vue({
+    // 根实例简单的渲染应用程序组件。
+        render: h => h(App)
     });
+    return { app };
 }
+
+export default createApp;
