@@ -1,11 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const { createRenderer } = require('vue-server-renderer');
+const { createBundleRenderer } = require('vue-server-renderer');
 
 const resolve = file => path.resolve(__dirname, file);
-const createApp = require('./src/app');
-
 const context = {
     title: 'Vue SSR',
     meta: `
@@ -14,27 +12,32 @@ const context = {
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     `
 };
-
 const app = express();
 const templatePath = resolve('./src/index.template.html');
 const template = fs.readFileSync(templatePath, 'utf-8');
-const renderer = createRenderer({ template });
+const renderer = createBundleRenderer(resolve('./dist/vue-ssr-server-bundle.json'), {
+    runInNewContext: false, // 推荐
+    template // （可选）页面模板
+    // clientManifest // （可选）客户端构建 manifest
+});
 
 app.get('*', (req, res) => {
-    const ctx = { url: req.url };
-    const app = createApp(ctx);
-
-    renderer.renderToString(app, context, (err, html) => {
+    context.url = req.url;
+    renderer.renderToString(context, (err, html) => {
         if (err) {
-            res.status(500).end('Internal Server Error');
-            return;
+            console.error(err);
+            if (err.code === 404) {
+                res.status(404).end('Page not found');
+            } else {
+                res.status(500).end('Internal Server Error');
+            }
+        } else {
+            res.end(html);
         }
-        res.end(html);
     });
 });
 
 const port = process.env.PORT || 8080;
-
 app.listen(port, () => {
     console.log(`server started at localhost:${port}`);
 });

@@ -157,6 +157,7 @@ module.exports = {
     "no-param-reassign": 0,
     // 强制在parseInt()使用基数参数
     "radix": 2,
-    "no-shadow": 0
+    "no-shadow": 0,
+    "allowEmptyReject": 0
   }
 }
