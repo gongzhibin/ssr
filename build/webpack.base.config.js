@@ -2,12 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
+    mode: isProd ? 'production' : 'development',
     devtool: isProd
         ? false
         : '#cheap-module-source-map',
@@ -71,5 +72,27 @@ module.exports = {
         : [
             new VueLoaderPlugin(),
             new FriendlyErrorsPlugin()
-        ]
+        ],
+    optimization: isProd
+        ? {
+            minimize: true,
+            minimizer: [
+                new TerserPlugin({
+                    exclude: /node_modules/,
+                    cache: true,
+                    parallel: true,
+                    sourceMap: true,
+                    terserOptions: {
+                        ecma: 6,
+                        compress: true,
+                        output: {
+                            warnings: false,
+                            comments: false,
+                            beautify: false
+                        }
+                    }
+                })
+            ]
+        }
+        : {}
 };

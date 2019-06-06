@@ -6,8 +6,20 @@
 npm i
 ```
 
-开发环境:
+打包:
+
+```bash
+npm run build
+```
+
+开发环境：
 
 ```bash
 npm run dev
+```
+
+启动：
+
+```bash
+npm run start
 ```

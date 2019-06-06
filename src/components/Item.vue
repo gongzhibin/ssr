@@ -7,6 +7,7 @@
 export default {
     asyncData({ store, route }) {
         // 触发 action 后，会返回 Promise
+        console.log(route);
         return store.dispatch('fetchItem', route.params.id);
     },
     computed: {

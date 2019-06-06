@@ -1,7 +1,6 @@
 function fetchItem(id) {
     return new Promise((resolve, reject) => {
-        console.log(id);
-        resolve({ item: 'test' });
+        resolve({ title: 'item' });
     });
 }
 export default fetchItem;

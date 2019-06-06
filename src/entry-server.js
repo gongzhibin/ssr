@@ -19,7 +19,7 @@ export default context => new Promise((resolve, reject) => {
             if (component.asyncData) {
                 return component.asyncData({
                     store,
-                    router: router.currentRoute
+                    route: router.currentRoute
                 });
             }
         })).then(() => {

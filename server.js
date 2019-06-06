@@ -4,7 +4,7 @@ const express = require('express');
 const { createBundleRenderer } = require('vue-server-renderer');
 
 const resolve = file => path.resolve(__dirname, file);
-const context = {
+const defaultContext = {
     title: 'Vue SSR',
     meta: `
         <meta charset="UTF-8">
@@ -12,9 +12,9 @@ const context = {
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     `
 };
+
 const app = express();
-const templatePath = resolve('./src/index.template.html');
-const template = fs.readFileSync(templatePath, 'utf-8');
+const template = fs.readFileSync(resolve('./src/index.template.html'), 'utf-8');
 const renderer = createBundleRenderer(resolve('./dist/vue-ssr-server-bundle.json'), {
     runInNewContext: false, // 推荐
     template // （可选）页面模板
@@ -22,7 +22,10 @@ const renderer = createBundleRenderer(resolve('./dist/vue-ssr-server-bundle.json
 });
 
 app.get('*', (req, res) => {
-    context.url = req.url;
+    const context = {
+        ...defaultContext,
+        url: req.url
+    };
     renderer.renderToString(context, (err, html) => {
         if (err) {
             console.error(err);
