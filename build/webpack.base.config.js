@@ -84,9 +84,10 @@ module.exports = {
                     sourceMap: true,
                     terserOptions: {
                         ecma: 6,
-                        compress: true,
+                        compress: {
+                            warnings: false
+                        },
                         output: {
-                            warnings: false,
                             comments: false,
                             beautify: false
                         }
